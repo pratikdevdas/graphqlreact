@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom'
 import App from './App'
-
-import {ApolloProvider, ApolloClient,HttpLink, InMemoryCache } from '@apollo/client'
+import { ApolloProvider, ApolloClient,HttpLink, InMemoryCache } from '@apollo/client'
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -10,7 +9,6 @@ const client = new ApolloClient({
   }
   )
 })
-
 
 ReactDOM.render(
 <ApolloProvider client={client}>
