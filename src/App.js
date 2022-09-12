@@ -2,6 +2,7 @@ import React,{useState} from 'react'
 import { useQuery } from '@apollo/client'
 import Persons from './Persons'
 import PersonForm from './PersonForm'
+import PhoneForm from './PhoneForm'
 import { ALL_PERSONS } from './queries'
 
 function App() {
@@ -15,13 +16,14 @@ function App() {
 
   const notify = (message) => {
     setErrorMessage(message)
-    setTimeout(()=>{setErrorMessage(null)},1000)
+    setTimeout(()=>{setErrorMessage(null)},5000)
   }
   return (
     <div className="App">
       <Notify errorMessage={errorMessage}/>
       <Persons persons={result.data.allPersons}/>
       <PersonForm setError={notify}/>
+      <PhoneForm setError={notify}/>
     </div>
   );  
 }
