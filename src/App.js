@@ -1,10 +1,27 @@
 import React, { useState } from "react";
-import { useApolloClient, useQuery } from "@apollo/client";
+import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
 import Persons from "./Persons";
 import PersonForm from "./PersonForm";
 import PhoneForm from "./PhoneForm";
 import LoginForm from "./LoginForm";
-import { ALL_PERSONS } from "./queries";
+import { ALL_PERSONS, PERSON_ADDED } from "./queries";
+
+export const updateCache = (cache, query, addedPerson)=>{
+  const uniqByName = (a) => {
+    let seen = new Set()
+    return a.filter((item)=>{
+      let k = item.name
+      return seen.has(k) ? false : seen.add(k)
+    })
+  }
+
+  cache.updateQuery(query,({allPersons})=>{
+    return {
+      allPersons : uniqByName(allPersons.concat(addedPerson))
+    }
+  })
+}
+
 
 function App() {
   const [token, setToken] = useState(null);
@@ -12,6 +29,13 @@ function App() {
   const result = useQuery(ALL_PERSONS);
   const client = useApolloClient()
 
+  useSubscription(PERSON_ADDED,{
+    onData: ({data, client}) =>{
+      const addedPerson = data?.data?.personAdded
+      updateCache(client.cache, { query: ALL_PERSONS}, addedPerson)
+    }
+  })
+  
   if (result.loading) {
     return <div>loading...</div>;
   }
