@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useApolloClient, useQuery, useSubscription } from "@apollo/client";
 import Persons from "./Persons";
 import PersonForm from "./PersonForm";
@@ -28,6 +28,13 @@ function App() {
   const [errorMessage, setErrorMessage] = useState(null);
   const result = useQuery(ALL_PERSONS);
   const client = useApolloClient()
+
+  useEffect(() => {
+    const tokenFromStorage = localStorage.getItem("phonenumbers-user-token");
+    if (tokenFromStorage) {
+      setToken(tokenFromStorage);
+    }
+  }, []);
 
   useSubscription(PERSON_ADDED,{
     onData: ({data, client}) =>{
