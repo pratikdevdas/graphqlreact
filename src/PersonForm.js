@@ -20,7 +20,6 @@ const PersonForm = ({ setError }) => {
     }
   });
 
-  console.log(name);
   const submit = (event) => {
     event.preventDefault();
 
